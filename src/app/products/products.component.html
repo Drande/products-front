@@ -1,1 +1,40 @@
-<p>products works!</p>
+<ng-container *ngIf="productsDataSource.data">
+    <div class="table_container">
+        <div class="actions">
+            <button mat-raised-button (click)="addProduct()">Add Product</button>
+        </div>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="productsDataSource">
+                <ng-container *ngFor="let column of tableColumns | keyvalue">
+                    <ng-container [matColumnDef]="column.key">
+                        <th mat-header-cell *matHeaderCellDef>{{column.value.label}}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div [ngSwitch]="column.value.type">
+                                <div *ngSwitchCase="'currency'">
+                                    {{element[column.key] | currency:'USD'}}
+                                </div>
+                                <div *ngSwitchDefault>
+                                    {{element[column.key]}}
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+                </ng-container>
+                <ng-container [matColumnDef]="'actions'">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button (click)="updateProduct(element)">
+                            <mat-icon aria-hidden="false" aria-label="Update">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="deleteProduct(element)">
+                            <mat-icon aria-hidden="false" aria-label="Delete">delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" pageSize="10" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+</ng-container>

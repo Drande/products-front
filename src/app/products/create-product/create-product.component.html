@@ -1,0 +1,27 @@
+<form class="form-container" [formGroup]="productForm">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="Input" formControlName="name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Price</mat-label>
+    <div class="prefix-field">
+      <span *ngIf="productForm.controls['price'].value != null">$</span>
+      <input matInput placeholder="Input" type="number" [min]="1" [max]="1000" formControlName="price">
+    </div>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Company</mat-label>
+    <input matInput placeholder="Input" formControlName="company">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Maximun Age (Optional)</mat-label>
+    <input matInput placeholder="Input" type="number" [min]="0" [max]="100" formControlName="ageRestriction">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description (Optional)</mat-label>
+    <textarea matInput placeholder="Textarea" formControlName="description"></textarea>
+  </mat-form-field>
+  <button mat-button color="primary" (click)="handleSubmit()" [disabled]="!productForm.valid">{{actionName}}</button>
+  <button mat-button (click)="handleClose()" >Cancelar</button>
+</form>
