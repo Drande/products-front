@@ -1,23 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ProductsRoutingModule } from './products-routing.module';
-import { ProductsComponent } from './products.component';
-import { CreateProductComponent } from './create-product/create-product.component';
-import { ProductsService } from './products.service';
 
+import { ProductsService } from './products.service';
+import { EffectsModule } from '@ngrx/effects';
+import { effects } from './store/effects';
+import { StoreModule } from '@ngrx/store';
+import { productsFeatureName, reducers } from './store/reducers';
 
 @NgModule({
   declarations: [
-    ProductsComponent,
-    CreateProductComponent
   ],
   imports: [
     CommonModule,
-    ProductsRoutingModule
+    ProductsRoutingModule,
+    StoreModule.forFeature(productsFeatureName, reducers),
+    EffectsModule.forFeature(effects),
   ],
   providers: [
-    ProductsService
+    ProductsService,
   ]
 })
 export class ProductsModule { }
