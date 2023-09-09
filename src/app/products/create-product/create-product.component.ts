@@ -31,13 +31,14 @@ export class CreateProductComponent {
   currentProduct?: Product;
 
   productForm = new FormGroup({
-    name: new FormControl<string>("", { validators: [Validators.maxLength(50)], nonNullable: true }),
+    name: new FormControl<string>("", { validators: [Validators.required, Validators.maxLength(50)], nonNullable: true }),
     description: new FormControl<string>("", { validators: [Validators.maxLength(100)], nonNullable: false }),
     ageRestriction: new FormControl<number | null>(null, { validators: [Validators.min(0), Validators.max(100)], nonNullable: false }),
     company: new FormControl<string>("", { validators: [Validators.required, Validators.maxLength(50)], nonNullable: true }),
     price: new FormControl<number>(0, { validators: [Validators.required, Validators.min(1), Validators.max(1000)], nonNullable: true }),
   });
 
+  productFormControls: typeof this.productForm.controls;
 
   constructor(
     public dialogRef: MatDialogRef<CreateProductComponent>,
@@ -51,6 +52,7 @@ export class CreateProductComponent {
     } else {
       this.actionName = "Create";
     }
+    this.productFormControls = this.productForm.controls;
   }
 
   handleSubmit() {

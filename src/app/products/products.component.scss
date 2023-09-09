@@ -7,3 +7,9 @@
     gap: 1rem;
     padding: 1rem 1rem;
 }
+
+.row-actions {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+}

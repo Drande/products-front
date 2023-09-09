@@ -1,7 +1,14 @@
 <form class="form-container" [formGroup]="productForm">
+  <span class="form-title">Product details</span>
   <mat-form-field>
     <mat-label>Name</mat-label>
     <input matInput placeholder="Input" formControlName="name">
+    <mat-error *ngIf="productFormControls.name.errors let errors">
+      {{
+        errors['required'] ? 'The name is required.' :
+        errors['maxlength'] ? 'The name can accept up to 50 characters.' : ''
+      }}
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Price</mat-label>
@@ -9,19 +16,41 @@
       <span *ngIf="productForm.controls['price'].value != null">$</span>
       <input matInput placeholder="Input" type="number" [min]="1" [max]="1000" formControlName="price">
     </div>
+    <mat-error *ngIf="productFormControls.price.errors let errors">
+      {{
+        errors['min'] || errors['max'] ? 'The price must be between 1 and 1000.' :
+        errors['required'] ? 'The price is required.' : ''
+      }}
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Company</mat-label>
     <input matInput placeholder="Input" formControlName="company">
+    <mat-error *ngIf="productFormControls.company.errors let errors">
+      {{
+        errors['required'] ? 'The company is required.' :
+        errors['maxlength'] ? 'The company can accept up to 50 characters.' : ''
+      }}
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Maximun Age (Optional)</mat-label>
     <input matInput placeholder="Input" type="number" [min]="0" [max]="100" formControlName="ageRestriction">
+    <mat-error *ngIf="productFormControls.ageRestriction.errors let errors">
+      {{
+        errors['max'] ? 'The Maximun Age should be between 0 and 100.' : ''
+      }}
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Description (Optional)</mat-label>
-    <textarea matInput placeholder="Textarea" formControlName="description"></textarea>
+    <textarea [maxLength]="100" matInput placeholder="Textarea" formControlName="description"></textarea>
+    <mat-error *ngIf="productFormControls.description.errors let errors">
+      {{
+        errors['maxlength'] ? 'The description can accept up to 100 characters.' : ''
+      }}
+    </mat-error>
   </mat-form-field>
-  <button mat-button color="primary" (click)="handleSubmit()" [disabled]="!productForm.valid">{{actionName}}</button>
-  <button mat-button (click)="handleClose()" >Cancelar</button>
+  <button mat-raised-button color="primary" (click)="handleSubmit()" [disabled]="!productForm.valid">{{actionName}}</button>
+  <button mat-raised-button (click)="handleClose()">Cancelar</button>
 </form>
