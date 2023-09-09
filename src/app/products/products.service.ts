@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Product } from './models/product';
 import { CreateProductDto } from './models/create-product-dto';
 import { UpdateProductDto } from './models/update-product-dto';
+import productsUrls from './constants/products.urls';
 
 @Injectable()
 export class ProductsService {
-  private resourceUrl: string = "http://localhost:3000/api/products";
   constructor(
     private readonly httpClient: HttpClient,
   ) {
@@ -15,29 +15,29 @@ export class ProductsService {
   }
 
   getProduct(id: string | number): Observable<Product> {
-    const requestUrl = `${this.resourceUrl}/${id}`;
+    const requestUrl = productsUrls.getById(id);
     return this.httpClient.get<Product>(requestUrl);
   }
 
   getProducts(): Observable<Product[]> {
-    const requestUrl = this.resourceUrl;
+    const requestUrl = productsUrls.getAll;
     return this.httpClient.get<Product[]>(requestUrl);
   }
 
   createProduct(product: CreateProductDto): Observable<Product> {
-    const requestUrl = this.resourceUrl;
+    const requestUrl = productsUrls.create;
     const body = product;
     return this.httpClient.post<Product>(requestUrl, body);
   }
 
-  updateProduct(id: string | number, product: UpdateProductDto): Observable<void> {
-    const requestUrl = `${this.resourceUrl}/${id}`;
+  updateProduct(id: string | number, product: UpdateProductDto): Observable<boolean> {
+    const requestUrl = productsUrls.update(id);
     const body = product;
-    return this.httpClient.put<void>(requestUrl, body);
+    return this.httpClient.put<HttpResponse<void>>(requestUrl, body, { observe: 'response' }).pipe(map(response => response.ok));
   }
 
-  deleteProduct(id: string | number): Observable<void> {
-    const requestUrl = `${this.resourceUrl}/${id}`;
-    return this.httpClient.delete<void>(requestUrl);
+  deleteProduct(id: string | number): Observable<boolean> {
+    const requestUrl = productsUrls.delete(id);
+    return this.httpClient.delete<HttpResponse<void>>(requestUrl, { observe: 'response' }).pipe(map(response => response.ok));
   }
 }
